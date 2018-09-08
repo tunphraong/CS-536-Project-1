@@ -23,6 +23,5 @@ public class P1 {
         // symTable.add(newMap);
 
          SymTable test = new SymTable();
-    
     }
 }
