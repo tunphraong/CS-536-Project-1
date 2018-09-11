@@ -2,9 +2,6 @@ import java.util.*;
 
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
-// What operations will be done on SymTable ?
-// 
-
 public class SymTable {
 
     private List<HashMap<String,Sym>> symTable;
@@ -26,7 +23,7 @@ public class SymTable {
     public void addDec1(String name, Sym sym) throws DuplicateSymException, 
            EmptySymTableException {
 
-        // If this SymTable's list is empty, throw an EmptySymTableException. 
+        // If this SymTable'slist  is empty, throw an EmptySymTableException. 
         if (symTable.isEmpty()) {
             throw new EmptyStackException();
         }
@@ -83,10 +80,12 @@ public class SymTable {
 
         boolean isExist = false;
         HashMap<String, Sym> closestHashMap = symTable.get(0);
+        // System.out.println("first hash map" +  closestHashMap);
         for (HashMap temp : symTable) {
             if (temp.containsKey(name)) {
                 isExist = true;
                 closestHashMap = temp; // Does this guaratnee the cloest to the front?
+                break;
             }
         }
           
@@ -118,10 +117,14 @@ public class SymTable {
      */
     public void print(){
         System.out.println("\nSym Table\n");
+        //Iterator<HashMap<String, Sym>> itr = symTable.iterator();
+        // while(itr.hasNext()){
+        //     HashMap<String, Sym> M = itr.next();
+        //     System.out.println(M.toString());
+        // }
         for (HashMap M: symTable) {
             System.out.println(M.toString());
         }
-        System.out.println();
     } // end print
 }
 
