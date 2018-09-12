@@ -170,11 +170,11 @@ public class P1 {
         // {secondVariable=int, firstVarible=boolean}
         
         try {
-            //Sym temp = table.lookupGlobal("firstVarible");
-            Sym lookUp = new Sym("int");
-            System.out.println(table.lookupGlobal("secondVariable"));
-            System.out.println(lookUp);
-            if (table.lookupGlobal("firstVarible") != lookUp) {
+            Sym temp = table.lookupGlobal("firstVarible");
+            Sym lookUp = new Sym("float");
+            System.out.println(lookUp.getType());
+            System.out.println(temp.getType());
+            if (temp.getType() != lookUp.getType()) {
                 System.out.println("lookupGlobal produces wrong result");
             }
             
