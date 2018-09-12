@@ -2,120 +2,130 @@ import java.util.*;
 
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
-// What operations will be done on SymTable ?
-// 
-
 public class SymTable {
-    /*
-    - Represent a symbol table: a data structure that stores the identifiers
-    declared in the program being compiled and information about each 
-    identifier (its type, where it will be stored at runtime)
 
-    - Implemened as list of HashMaps
-    - each HashMap will store the identifiers declared in one scope in the program
-    - HashMap key will be String and value will be Syms
-    */
-
-    // so we have 2 options in here
-    // either using ArrayList or Linked List
-    // So in my note I wrote using Linked List so it's probably right
-    // so why do we use Linked List of hash table in here?
     private List<HashMap<String,Sym>> symTable;
 
     public SymTable() { 
         // initialize the SymTable's List field to contain a single, empty HashMap.
+        HashMap<String,Sym> map = new HashMap<String,Sym>();
         symTable = new LinkedList​<HashMap<String,Sym>>();
+        symTable.add(map);
     }
-    public addDec1(String name, Sym sym) throws DuplicateSymException, 
+
+
+    /**
+     * @param name: name of the variable
+     * @param sym: type associated with the variable
+     * @throws DuplicateSymException  [already contains the given name as a key]
+     * @throws EmptySymTableException [If this SymTable's list is empty]
+     */
+    public void addDec1(String name, Sym sym) throws DuplicateSymException, 
            EmptySymTableException {
 
-        // If this SymTable's list is empty, throw an EmptySymTableException. 
+        // If this SymTable'slist  is empty, throw an EmptySymTableException. 
         if (symTable.isEmpty()) {
-            throw EmptyStackException;
+            throw new EmptyStackException();
         }
 
         // If either name or sym (or both) is null, throw a NullPointerException. 
-        if (name == null || sym == null) {
-            throw NullPointerException;
+        else if (name == null || sym == null) {
+            throw new NullPointerException();
         }
 
-        // If the first HashMap in the list already contains the given name as a key, 
-        // throw a DuplicateSymException.
-        firstHashMap = symTable.get(0);
+        HashMap<String,Sym> firstHashMap = symTable.get(0);
         if (firstHashMap.containsKey(name)) {
-            throw DuplicateSymException;
+            throw new DuplicateSymException();
         }
         // Otherwise, add the given name and sym to the first HashMap in the list.
         firstHashMap.put(name, sym);
+        symTable.set(0, firstHashMap); // replace old hash map with new
     }
 
-    public addScope() {
-        // add a new, empty Hashmap to front of the list
+    /**
+     *add a new, empty Hashmap to front of the list
+     */
+    public void addScope() {
         HashMap<String,Sym> newMap = new HashMap<String,Sym>();
         symTable.add(0, newMap);
     }
 
-    public Sym lookupLocal (String name) {
+    /**
+     @param name: name to search
+     @return the sym that contains name in the first HashMap
+    */
+    public Sym lookupLocal (String name) throws EmptySymTableException {
         // If this SymTable's list is empty, throw an EmptySymTableException. 
         if (symTable.isEmpty()) {
-            throw EmptyStackException;
-        }
+           throw new EmptySymTableException();
+        }   
+        
         // Otherwise, if the first HashMap in the list contains name as a key, return the associated Sym; 
         else if (symTable.get(0).containsKey(name)) {
             return symTable.get(0).get(name);
         }
          // otherwise, return null.
-        else {
-            return null;
-        }
+        return null;
+    }
 
-    public Sym lokupGlobal (String name) {
+    /**
+     * @param name: name to search in the entire list
+     * @return
+     */
+    public Sym lookupGlobal (String name) throws EmptySymTableException {
         // If this SymTable's list is empty, throw an EmptySymTableException. 
         if (symTable.isEmpty()) {
-            throw EmptyStackException;
+            throw new EmptySymTableException();
         }
 
-        isExist = false;
-        closestHashMap = null;
-        // If any HashMap in the list contains name as a key, 
-        // return the first associated Sym (i.e., the one from the 
-        //HashMap that is closest to the front of the list); 
+        boolean isExist = false;
+        HashMap<String, Sym> closestHashMap = symTable.get(0);
+        // System.out.println("first hash map" +  closestHashMap);
         for (HashMap temp : symTable) {
             if (temp.containsKey(name)) {
                 isExist = true;
                 closestHashMap = temp; // Does this guaratnee the cloest to the front?
+                break;
             }
         }
           
-        if (symTable.isExist()) {
+        if (isExist == true) {
             return closestHashMap.get(name);
         }
         // otherwise, return null.
-        else return null;
-        
+        return null;
     }
 
-    public void removeScope() throws EmptyStackException {
+    /**
+     * @throws EmptyStackException if symTable is empty
+     */
+    public void removeScope() throws EmptySymTableException {
         // If this SymTable's list is empty, throw an EmptySymTableException;
         //  otherwise, remove the HashMap from the front of the list. 
         //  To clarify, throw an exception only if before attempting to remove, 
         //  the list is empty (i.e. there are no HashMaps to remove). 
-        if (symTable.isEmpty()) throw EmptySymTableException;
+        if (symTable.isEmpty()) {
+            throw new EmptySymTableException();
+        }
         else {
             symTable.remove(0);
         }
     }
 
-    public void print() {
-        // This method is for debugging. First, print “\nSym Table\n”. 
-        // Then, for each HashMap M in the list, print M.toString() 
-        //followed by a newline. Finally, print one more newline. 
-        // All output should go to System.out.
+    /**
+     * Print out the list of HashMaps
+     */
+    public void print(){
         System.out.println("\nSym Table\n");
+        //Iterator<HashMap<String, Sym>> itr = symTable.iterator();
+        // while(itr.hasNext()){
+        //     HashMap<String, Sym> M = itr.next();
+        //     System.out.println(M.toString());
+        // }
         for (HashMap M: symTable) {
             System.out.println(M.toString());
         }
-    }
+    } // end print
 }
 
 
