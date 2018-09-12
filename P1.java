@@ -1,38 +1,35 @@
 import java.util.*;
 
-// import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
-// import com.sun.org.apache.xerces.internal.util.SymbolTable;
 
 public class P1 {
     public static void main(String [] args) {
 
 
         // Test Sym class first
-        
         String[] test_list = {"int", "String", "boolean", ""};
 
         for (String temp: test_list) {
             Sym firstSym = new Sym(temp);
 
+            // test getType
             if (firstSym.getType() != temp) {
                 System.out.println("getType produces wrong result");
             }
-
+            // test toString
             if (firstSym.toString() != temp) {
                 System.out.println("getType produces wrong result");
             }
-
         }
 
 
         // test SymTable class
-        // 
         // test exception throw on removeScope
         SymTable table;
         try {
             table = new SymTable();
             table.removeScope();  
             // we have 1 HashMap afer calling constructor
+            // delete 1 HashMap
             // so this shouldn't throw an error
             try {
                 table.removeScope(); 
@@ -40,16 +37,15 @@ public class P1 {
                 // this should throw EmptySymTableException
             } catch (EmptySymTableException e) {
             } catch (Exception e) {
-                System.out.println("Wrong exception thrown");
+                System.out.println("Wrong exception thrown" + e.toString());
             }
         } catch (EmptySymTableException e) {
-            System.out.println("after calling SymTable constructor");
+            System.out.println("calling SymTable constructor");
         } catch (Exception e) {
             System.out.println("thrown after calling SymTable constructor");
         }
 
         table = new SymTable();
-
         // test addDec1
         // test adding null to addDec
         try {
@@ -59,7 +55,7 @@ public class P1 {
             // expected
             // System.out.println("Go here");
         } catch (Exception e) {
-            System.out.println("Wrong exception thrown");
+            System.out.println("Wrong exception thrown" + e.toString());
         }
 
         // test adding normal data to addDec
@@ -81,14 +77,14 @@ public class P1 {
             // System.out.println("Duplicate");
             // expected
         } catch (Exception e) {
-            System.out.println("Wrong exception thrown");
+            System.out.println("Wrong exception thrown" + e.toString());
         }
         
         // test adding Scope
         try {
             table.addScope();
         } catch (Exception e) {
-            System.out.println("Wrong exception thrown on adding scope");
+            System.out.println("Wrong exception thrown on adding scope" + e.toString());
         }
 
         // test adding some new data to the new HashMap
@@ -100,14 +96,12 @@ public class P1 {
              Sym thirdSym = new Sym("double");
             table.addDec1("thirdVariable", thirdSym);
         } catch (Exception e) {
-            System.out.println("Wrong exception thrown");
+            System.out.println("Wrong exception thrown" + e.toString());
         }
-
 
 
         // test lookupLocal
         SymTable newTable;
-
         // test lookupLocal and lookupGlobal with emptyTable
         try {
             newTable = new SymTable();
@@ -118,7 +112,7 @@ public class P1 {
                 // expected
                 // System.out.println("expected isEmpty");
             } catch (Exception e){
-             System.out.println("Wrong exception thrown");   
+             System.out.println("Wrong exception thrown" + e.toString());   
             }
 
             try {
@@ -127,13 +121,13 @@ public class P1 {
                 // expected
                 // System.out.println("expected isEmpty");
             } catch (Exception e){
-             System.out.println("Wrong exception thrown");   
+             System.out.println("Wrong exception thrown" + e.toString());   
             }
 
         } catch (EmptySymTableException e) {
             System.out.println("after calling SymTable constructor");
         } catch (Exception e){
-            System.out.println("Wrong exception thrown");   
+            System.out.println("Wrong exception thrown" + e.toString());   
         }
 
         // test lookupLocal with normal data
@@ -160,7 +154,7 @@ public class P1 {
             }
 
         } catch (Exception e) {
-                System.out.println("Wrong exception thrown");   
+                System.out.println("Wrong exception thrown" + e.toString());   
         }
 
         // test lookupGlobal
@@ -172,8 +166,8 @@ public class P1 {
         try {
             Sym temp = table.lookupGlobal("firstVarible");
             Sym lookUp = new Sym("float");
-            System.out.println(lookUp.getType());
-            System.out.println(temp.getType());
+            //System.out.println(lookUp.getType());
+            //System.out.println(temp.getType());
             if (temp.getType() != lookUp.getType()) {
                 System.out.println("lookupGlobal produces wrong result");
             }
@@ -186,7 +180,7 @@ public class P1 {
             }
 
         } catch (Exception e) {
-            System.out.println("Wrong exception thrown");   
+            System.out.println("Wrong exception thrown" + e.toString());   
         }
 
         // testing PRINT
@@ -212,6 +206,7 @@ public class P1 {
             for (int i = 0; i <= 2 ; i++) {
                 test_print.removeScope();
             }
+            System.out.println("List with zero HashMap");
             test_print.print();
         } catch (Exception e) {
             System.out.println("Wrong exception thrown " + e.toString());
